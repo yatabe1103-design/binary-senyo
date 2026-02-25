@@ -1,54 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>バイナリー専用</title>
-<style>
-body{font-family:Arial;padding:15px;background:#f5f5f5}
-.card{background:#fff;padding:12px;margin:10px 0;border-radius:10px}
-button{padding:10px;font-size:16px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>バイナリー専用シグナル</title>
+  <style>
+    body{font-family:Arial;padding:15px;background:#f5f5f5}
+    .card{background:#fff;padding:12px;margin:10px 0;border-radius:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    button,select{padding:10px;font-size:16px}
+    .big{font-size:20px;font-weight:700}
+    .muted{opacity:.7}
+  </style>
 </head>
 <body>
-<h2>バイナリー専用シグナル</h2>
-<button onclick="enableNotify()">通知ON</button>
-<div id="signals">待機中...</div>
+  <h2>バイナリー専用シグナル</h2>
 
-<script>
-function enableNotify(){ Notification.requestPermission(); }
+  <div class="row">
+    <button id="btnNotify">通知ON</button>
+    <select id="selSymbol"></select>
+    <select id="selTf"></select>
+  </div>
 
-function openTrade(){
-  window.open("https://jp.theoption.com/","_blank");
-}
+  <div class="card">
+    <div class="big" id="status">待機中…</div>
+    <div class="muted" id="detail"></div>
+  </div>
 
-function generateSignal(){
-  const pairs=["USD/JPY","EUR/USD","EUR/JPY","AUD/JPY","GBP/JPY","AUD/USD","NZD/JPY"];
-  const times=["15秒","30秒","1分","3分","5分"];
-  const pair=pairs[Math.floor(Math.random()*pairs.length)];
-  const time=times[Math.floor(Math.random()*times.length)];
-  const direction=Math.random()>0.5?"HIGH":"LOW";
-  const winrate=Math.floor(Math.random()*31)+60;
-  const spike=Math.random()>0.6;
+  <div class="card">
+    <div class="big">直近バックテスト</div>
+    <div id="bt"></div>
+    <div id="signals"></div>
+  </div>
 
-  if(winrate < 70 || !spike) return;
-
-  const html = `
-    <div class="card">
-      <b>${pair}</b><br>
-      ${time} ${direction}<br>
-      勝率 ${winrate}%<br>
-      ⚡ボラ急変<br>
-      <button onclick="openTrade()">取引を開く</button>
-    </div>
-  `;
-  document.getElementById("signals").innerHTML = html;
-
-  if(Notification.permission==="granted"){
-    new Notification(`${pair} ${direction}`,{body:`${time} 勝率${winrate}% / ボラ急変`});
-  }
-}
-setInterval(generateSignal, 5000);
-</script>
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
